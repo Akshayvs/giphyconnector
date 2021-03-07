@@ -1,22 +1,24 @@
 package com.sofi.giphyconnector.DataTransferObjects;
 
+/**
+ * Data Transfer object for constructing the API response payload returned by GIPHYConnector svc.
+ *
+ * @return
+ */
 public class SearchResultResponseDTO {
 
-    /**
-     * Data Transfer object for constructing the API response payload returned by GIPHYConnector svc.
-     * @return
-     */
+    private SearchResultEntryDTO[] data;
+
+    public SearchResultResponseDTO(int size) {
+        this.data = new SearchResultEntryDTO[size];
+    }
+
     public SearchResultEntryDTO[] getData() {
         return data;
     }
 
     public void setData(SearchResultEntryDTO[] data) {
         this.data = data;
-    }
-
-    private SearchResultEntryDTO[] data;
-    public SearchResultResponseDTO(int size) {
-        this.data = new SearchResultEntryDTO[size];
     }
 
     public void addDataEntry(SearchResultEntryDTO entry, int index) {
