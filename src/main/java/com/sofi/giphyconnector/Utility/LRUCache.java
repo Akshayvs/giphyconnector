@@ -6,6 +6,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class LRUCache extends LinkedHashMap<String, SearchResultResponseDTO> {
+    /**
+     * This is a local implementation of a in-memory cache which uses the 'Least Recently Used' principal for cache eviction
+     * In the context of our application, this wrapper will store search-key to -> search Result mapping.
+     *
+     */
+
     private int capacity;
 
     public LRUCache(int capacity) {
