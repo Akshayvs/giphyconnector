@@ -22,7 +22,6 @@ public class GIPHYApiConnector {
     private static final int CACHE_SIZE = 1000;
 
     private static final String SEARCH_ENDPOINT_BASE_URL = "http://api.giphy.com/v1/gifs/search";
-    private static final String LOCALHOST = "http://localhost:8080/status";
     private static final Logger LOGGER = LoggerFactory.getLogger(GIPHYApiConnector.class);
     private static final RestTemplate restTemplate = com.sofi.giphyconnector.Utility.RestTemplate.RestTemplateWithTimeout();
     private static LRUCache lruCache = new LRUCache(CACHE_SIZE);
@@ -118,5 +117,4 @@ public class GIPHYApiConnector {
         }
         return result;
     }
-
 }

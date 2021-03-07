@@ -1,0 +1,15 @@
+Please execute the following commands in the terminal to generate and deploy the docker image.
+
+1. docker build -f Dockerfile -t giphy-connector-docker-image .
+
+2. docker images
+ (Validate that you are able to see the image named 'giphy-connector-docker-image')
+
+3. docker run -p 8080:8080 giphy-connector-docker-image
+
+--------------------------------------------------------------------------
+
+sourcecode can be accessed from : https://github.com/Akshayvs/giphyconnector
+
+
+

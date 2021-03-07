@@ -3,7 +3,7 @@ package com.sofi.giphyconnector.Utility;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
 public class RestTemplate {
-    private static final int CONNECTION_TIMEOUT_MILLISECONDS = 2500;
+    private static final int CONNECTION_TIMEOUT_MILLISECONDS = 6000;
 
     public static org.springframework.web.client.RestTemplate RestTemplateWithTimeout() {
 
