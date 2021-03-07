@@ -19,7 +19,7 @@ public class LRUCache extends LinkedHashMap<String, SearchResultResponseDTO> {
         this.capacity = capacity;
     }
 
-    public boolean containsKey( String key) {
+    public boolean containsKey(String key) {
         return super.containsKey(key);
     }
 
