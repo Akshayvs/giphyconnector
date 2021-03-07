@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.TimeUnit;
+
 
 /**
  * Basic idempotent endpoint.
@@ -24,9 +26,14 @@ public class HealthCheckController {
 
         LOGGER.info("Executing /Status endpoint");
 
+
+
         try {
+            TimeUnit.SECONDS.sleep(15);
+
             GenericResponseDTO responseData = new GenericResponseDTO(message, HttpStatus.OK);
             LOGGER.info("Execution successful");
+
             return new ResponseEntity(responseData, HttpStatus.OK);
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage(), ex);

@@ -1,6 +1,7 @@
 package com.sofi.giphyconnector.controllers;
 
 import com.sofi.giphyconnector.DataTransferObjects.SearchResultResponseDTO;
+import com.sofi.giphyconnector.Exceptions.GenericException;
 import com.sofi.giphyconnector.Utility.GIPHYApiConnector;
 import com.sofi.giphyconnector.Utility.InputValidator;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.ResourceAccessException;
 
 /**
  * This class handles the gif search endpoint for the connector.
@@ -25,6 +27,7 @@ public class SearchGifsController {
     private static final InputValidator inputValidator = new InputValidator();
 
     @GetMapping(value = "/search/{searchKey}", produces = MediaType.APPLICATION_JSON_VALUE)
+
     public ResponseEntity<SearchResultResponseDTO> searchGifs(@PathVariable("searchKey") String searchKey) {
 
         LOGGER.info("Executing /Search endpoint");
@@ -38,12 +41,17 @@ public class SearchGifsController {
         try {
             SearchResultResponseDTO responseData = apiConnector.queryGiphySearchAPI(searchKey);
             ResponseEntity<SearchResultResponseDTO> entity = new ResponseEntity(responseData, HttpStatus.OK);
-
             LOGGER.info("Search query successful for searchKey : " + searchKey);
             return entity;
-        } catch (Exception ex) {
+        }
+        catch (ResourceAccessException ex) {
+            return new ResponseEntity("Connection Timeout when calling GIPHY API.", HttpStatus.REQUEST_TIMEOUT);
+        }
+        catch (GenericException ex) {
+            return new ResponseEntity(ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch (Exception ex) {
             LOGGER.error(ex.getMessage(), ex);
-            //todo : Return different HTTP RESPONSE TYPES for each of the error scenarios
             return new ResponseEntity(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
