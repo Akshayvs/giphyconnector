@@ -27,7 +27,6 @@ public class HealthCheckController {
         LOGGER.info("Executing /Status endpoint");
 
 
-
         try {
             TimeUnit.SECONDS.sleep(15);
 

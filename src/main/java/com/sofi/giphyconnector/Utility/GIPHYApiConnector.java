@@ -28,12 +28,9 @@ public class GIPHYApiConnector {
 
     /**
      * @param searchQuery
-     * @return
-     *
-     * TODO :
+     * @return TODO :
      * Add retry logic
      * better error handling
-     *
      */
     public SearchResultResponseDTO queryGiphySearchAPI(String searchQuery) throws GenericException {
         /**

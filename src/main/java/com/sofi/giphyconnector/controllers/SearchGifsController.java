@@ -43,14 +43,11 @@ public class SearchGifsController {
             ResponseEntity<SearchResultResponseDTO> entity = new ResponseEntity(responseData, HttpStatus.OK);
             LOGGER.info("Search query successful for searchKey : " + searchKey);
             return entity;
-        }
-        catch (ResourceAccessException ex) {
+        } catch (ResourceAccessException ex) {
             return new ResponseEntity("Connection Timeout when calling GIPHY API.", HttpStatus.REQUEST_TIMEOUT);
-        }
-        catch (GenericException ex) {
+        } catch (GenericException ex) {
             return new ResponseEntity(ex.getMessage(), HttpStatus.NOT_FOUND);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             LOGGER.error(ex.getMessage(), ex);
             return new ResponseEntity(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
