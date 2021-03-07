@@ -16,8 +16,24 @@ public class GIPHYApiConnector {
     private static final String TEST_ENV_API_KEY = "nPcu7YTrpMkRwN3aMWS63gJWEm4bKKI0";
     private static final int SEARCH_RESULT_ENTRY_LIMIT = 5;
     private static final String SEARCH_ENDPOINT_BASE_URL = "http://api.giphy.com/v1/gifs/search";
+    private static final int CACHE_SIZE = 1000;
+    private static LRUCache lruCache;
 
+    public GIPHYApiConnector() {
+        this.lruCache = new LRUCache(CACHE_SIZE);
+    }
     public SearchResultResponseDTO queryGiphySearchAPI(String searchQuery) {
+        /**
+         *
+         * To optimize the latency, I have added caching logic to dedupe search calls to the GIPHY api for the keywords that are most frequently used.
+         * However, this logic will only work under the assumption that the results for each search query are constant and will not change over time .
+         * Since we are using an in-memory cache, this caching will be invalidated every time the service reboots.
+         * As a long term solution we should configure a memcached layer (local or shared) with an appropriate cache eviction / time to live polic.
+         */
+
+        if(lruCache.containsKey(searchQuery)) {
+            return lruCache.get(searchQuery);
+        }
 
         // STEP 1 : GET THE RESPONSE
 
@@ -59,13 +75,20 @@ public class GIPHYApiConnector {
         try {
             SearchResultDTO dao = mapper.readValue(response.getBody().toString(), SearchResultDTO.class);
             List<SearchResultEntryDTO> gifs = dao.getData();
-            return this.constructResponsePayload(gifs);
+            SearchResultResponseDTO responseDTO = this.constructResponsePayload(gifs);
+
+            lruCache.put(searchQuery, responseDTO);
+
+            return responseDTO;
         } catch (Exception e) {
             System.out.println(e);
         }
 
         // TODO : handle this code branch gracefully.
-        return this.constructResponsePayload(null);
+
+        SearchResultResponseDTO responseDTO = this.constructResponsePayload(null);
+        lruCache.put(searchQuery, responseDTO);
+        return responseDTO;
     }
 
     private SearchResultResponseDTO constructResponsePayload(List<SearchResultEntryDTO> gifs ) {
