@@ -12,7 +12,7 @@ public class LRUCache extends LinkedHashMap<String, SearchResultResponseDTO> {
      *
      */
 
-    private int capacity;
+    private final int capacity;
 
     public LRUCache(int capacity) {
         super(capacity, 0.75F, true);

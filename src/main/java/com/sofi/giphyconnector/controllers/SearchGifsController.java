@@ -21,8 +21,8 @@ public class SearchGifsController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchGifsController.class);
     private static final String BAD_REQUEST_ERROR_MESSAGE = "Malformed input. Please check your input string";
-    private static GIPHYApiConnector apiConnector = new GIPHYApiConnector();
-    private static InputValidator inputValidator = new InputValidator();
+    private static final GIPHYApiConnector apiConnector = new GIPHYApiConnector();
+    private static final InputValidator inputValidator = new InputValidator();
 
     @GetMapping(value = "/search/{searchKey}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SearchResultResponseDTO> searchGifs(@PathVariable("searchKey") String searchKey) {

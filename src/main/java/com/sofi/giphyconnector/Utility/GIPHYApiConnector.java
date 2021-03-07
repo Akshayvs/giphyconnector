@@ -20,7 +20,7 @@ public class GIPHYApiConnector {
     private static LRUCache lruCache;
 
     public GIPHYApiConnector() {
-        this.lruCache = new LRUCache(CACHE_SIZE);
+        lruCache = new LRUCache(CACHE_SIZE);
     }
     public SearchResultResponseDTO queryGiphySearchAPI(String searchQuery) {
         /**

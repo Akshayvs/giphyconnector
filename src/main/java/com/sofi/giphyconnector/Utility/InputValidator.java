@@ -2,7 +2,7 @@ package com.sofi.giphyconnector.Utility;
 
 public class InputValidator {
 
-    private int MAX_QUERY_LENGTH = 30;
+    private final int MAX_QUERY_LENGTH = 30;
 
     /**
      *
