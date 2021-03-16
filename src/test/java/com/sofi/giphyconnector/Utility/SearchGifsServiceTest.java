@@ -1,17 +1,18 @@
 package com.sofi.giphyconnector.Utility;
 
-import com.sofi.giphyconnector.DataTransferObjects.SearchResultResponseDTO;
+import com.sofi.giphyconnector.model.connectorResponse.SearchGifsResponse;
+import com.sofi.giphyconnector.service.SearchGifsService;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GIPHYApiConnectorTest {
+class SearchGifsServiceTest {
     @Test
     public void testSearchFlow() {
-        GIPHYApiConnector conenctor = new GIPHYApiConnector();
+        SearchGifsService conenctor = new SearchGifsService();
 
         try {
-            SearchResultResponseDTO response = conenctor.queryGiphySearchAPI("cheeseburger");
+            SearchGifsResponse response = conenctor.queryGiphySearchAPI("cheeseburger");
             assertNotNull(response);
 
         } catch (Exception e) {

@@ -1,7 +1,5 @@
-package com.sofi.giphyconnector.controllers;
+package com.sofi.giphyconnector.api_rest;
 
-import com.sofi.giphyconnector.DataTransferObjects.SearchResultResponseDTO;
-import com.sofi.giphyconnector.Utility.GIPHYApiConnector;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

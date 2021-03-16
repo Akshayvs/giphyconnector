@@ -1,4 +1,4 @@
-package com.sofi.giphyconnector.controllers;
+package com.sofi.giphyconnector.api_rest;
 
 import com.sofi.giphyconnector.DataTransferObjects.GenericResponseDTO;
 import org.slf4j.Logger;
@@ -6,9 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -16,6 +15,7 @@ import java.util.concurrent.TimeUnit;
  * This can be used to validate that the service is correctly deployed on an application server and is connected to the right port.
  */
 @RestController
+@RequestMapping("/api/v1")
 public class HealthCheckController {
 
     private static final String message = "Service is running.";
@@ -28,8 +28,6 @@ public class HealthCheckController {
 
 
         try {
-            TimeUnit.SECONDS.sleep(15);
-
             GenericResponseDTO responseData = new GenericResponseDTO(message, HttpStatus.OK);
             LOGGER.info("Execution successful");
 
