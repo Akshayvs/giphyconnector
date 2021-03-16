@@ -1,6 +1,5 @@
 package com.sofi.giphyconnector.api_rest;
 
-import com.sofi.giphyconnector.DataTransferObjects.GenericResponseDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -22,16 +21,13 @@ public class HealthCheckController {
     private static final Logger LOGGER = LoggerFactory.getLogger(HealthCheckController.class);
 
     @GetMapping("/status")
-    public ResponseEntity<GenericResponseDTO> healthCheck() {
+    public ResponseEntity<String> healthCheck() {
 
         LOGGER.info("Executing /Status endpoint");
 
-
         try {
-            GenericResponseDTO responseData = new GenericResponseDTO(message, HttpStatus.OK);
             LOGGER.info("Execution successful");
-
-            return new ResponseEntity(responseData, HttpStatus.OK);
+            return new ResponseEntity(message, HttpStatus.OK);
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage(), ex);
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
