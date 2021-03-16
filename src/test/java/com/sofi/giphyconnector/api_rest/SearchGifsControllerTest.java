@@ -1,5 +1,6 @@
 package com.sofi.giphyconnector.api_rest;
 
+import com.sofi.giphyconnector.service.SearchGifsService;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,7 @@ class SearchGifsControllerTest {
 
     @Test
     public void testHappyPath() {
-        SearchGifsController searchEndpoint = new SearchGifsController();
+        SearchGifsController searchEndpoint = new SearchGifsController(new SearchGifsService());
 
         try {
             ResponseEntity response = searchEndpoint.searchGifs("hamburger");
@@ -23,7 +24,7 @@ class SearchGifsControllerTest {
 
     @Test
     public void testInputValidation() {
-        SearchGifsController searchEndpoint = new SearchGifsController();
+        SearchGifsController searchEndpoint = new SearchGifsController(new SearchGifsService());
 
         try {
             ResponseEntity response = searchEndpoint.searchGifs("wordWith1Number");
