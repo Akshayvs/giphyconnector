@@ -7,24 +7,35 @@ import com.sofi.giphyconnector.model.giphy.searchendpoint.GIPHYSearchResponse;
 import com.sofi.giphyconnector.model.giphy.searchendpoint.GIPHYSearchResponseData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.*;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
+@Service
 public class SearchGifsService {
 
     //CONSTANTS
-    private static final String TEST_ENV_API_KEY = "nPcu7YTrpMkRwN3aMWS63gJWEm4bKKI0";
-    private static final int SEARCH_RESULT_ENTRY_LIMIT = 5;
-    private static final int CACHE_SIZE = 1000;
+    @Autowired
+    private Environment environment;
 
-    private static final String SEARCH_ENDPOINT_BASE_URL = "http://api.giphy.com/v1/gifs/search";
-    private static final Logger LOGGER = LoggerFactory.getLogger(SearchGifsService.class);
-    private static final RestTemplate restTemplate = com.sofi.giphyconnector.Utility.RestTemplate.RestTemplateWithTimeout();
-    private static LRUCache lruCache = new LRUCache(CACHE_SIZE);
+    private String  api_key = environment.getProperty("GIPHY_API_KEY");
+    private final int SEARCH_RESULT_ENTRY_LIMIT = 5;
+    private final int CACHE_SIZE = 1000;
+    private final String SEARCH_ENDPOINT_BASE_URL = "http://api.giphy.com/v1/gifs/search";
+    private final Logger LOGGER = LoggerFactory.getLogger(SearchGifsService.class);
+    private final RestTemplate restTemplate = com.sofi.giphyconnector.Utility.RestTemplate.RestTemplateWithTimeout();
+    private LRUCache lruCache = new LRUCache(CACHE_SIZE);
+    private UriComponentsBuilder builder;
+
+    @Autowired
+    public SearchGifsService () {
+    }
 
     /**
      * @param searchQuery
@@ -51,17 +62,15 @@ public class SearchGifsService {
             try {
 
                 //BUILD THE URL
-                UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(SEARCH_ENDPOINT_BASE_URL)
-                        .queryParam("api_key", TEST_ENV_API_KEY)
+                builder = UriComponentsBuilder.fromHttpUrl(SEARCH_ENDPOINT_BASE_URL)
+                        .queryParam("api_key", api_key)
                         .queryParam("limit", SEARCH_RESULT_ENTRY_LIMIT)
                         .queryParam("q", searchQuery);
-
 
                 //ADD HEADERS
                 HttpHeaders headers = new HttpHeaders();
                 headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
                 HttpEntity<?> entity = new HttpEntity<>(headers);
-
 
                 //REQUEST PAYLOAD
                 ResponseEntity<GIPHYSearchResponse> response = restTemplate.exchange(
@@ -77,11 +86,8 @@ public class SearchGifsService {
                 }
 
                 try {
-
                     GIPHYSearchResponse responseBody = response.getBody();
-
                     List<GIPHYSearchResponseData> gifs = responseBody.getData();
-
                     SearchGifsResponse responseDTO = this.constructResponsePayload(gifs);
 
                     lruCache.put(searchQuery, responseDTO);
