@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 
 public class InputValidator {
 
-    private final int MAX_QUERY_LENGTH = 30;
     private static final Logger LOGGER = LoggerFactory.getLogger(InputValidator.class);
+    private final int MAX_QUERY_LENGTH = 30;
 
     /**
      * @param searchQuery - Keyword for searching Gifs

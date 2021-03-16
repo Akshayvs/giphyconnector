@@ -13,7 +13,7 @@ class SearchGifsControllerTest {
         SearchGifsController searchEndpoint = new SearchGifsController();
 
         try {
-            ResponseEntity response =  searchEndpoint.searchGifs("hamburger");
+            ResponseEntity response = searchEndpoint.searchGifs("hamburger");
             assertNotNull(response);
             assertEquals(response.getStatusCode(), HttpStatus.OK);
         } catch (Exception e) {
@@ -26,7 +26,7 @@ class SearchGifsControllerTest {
         SearchGifsController searchEndpoint = new SearchGifsController();
 
         try {
-            ResponseEntity response =  searchEndpoint.searchGifs("wordWith1Number");
+            ResponseEntity response = searchEndpoint.searchGifs("wordWith1Number");
             assertNotNull(response);
             assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
 

@@ -4,7 +4,8 @@ import com.sofi.giphyconnector.model.connectorResponse.SearchGifsResponse;
 import com.sofi.giphyconnector.service.SearchGifsService;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class SearchGifsServiceTest {
     @Test

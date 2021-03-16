@@ -1,9 +1,9 @@
 package com.sofi.giphyconnector.api_rest;
 
-import com.sofi.giphyconnector.model.connectorResponse.SearchGifsResponse;
 import com.sofi.giphyconnector.Exceptions.GenericException;
-import com.sofi.giphyconnector.service.SearchGifsService;
 import com.sofi.giphyconnector.Utility.InputValidator;
+import com.sofi.giphyconnector.model.connectorResponse.SearchGifsResponse;
+import com.sofi.giphyconnector.service.SearchGifsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -48,12 +48,12 @@ public class SearchGifsController {
             return responseEntity;
 
         } catch (ResourceAccessException ex) {
-            return new ResponseEntity ("Connection timeout when calling GIPHY API.", HttpStatus.REQUEST_TIMEOUT);
+            return new ResponseEntity("Connection timeout when calling GIPHY API.", HttpStatus.REQUEST_TIMEOUT);
         } catch (GenericException ex) {
-            return new ResponseEntity (ex.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(ex.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage(), ex);
-            return new ResponseEntity (ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
