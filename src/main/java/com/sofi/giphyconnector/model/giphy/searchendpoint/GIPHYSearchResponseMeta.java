@@ -1,4 +1,4 @@
-package com.sofi.giphyconnector.DataTransferObjects;
+package com.sofi.giphyconnector.model.giphy.searchendpoint;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -7,12 +7,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * Dev Doc : https://developers.giphy.com/docs/api/endpoint#search
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SearchResultMetadataDTO {
+public class GIPHYSearchResponseMeta {
 
     private String status;
     private String response_id;
 
-    public SearchResultMetadataDTO() {
+    public GIPHYSearchResponseMeta() {
 
     }
 

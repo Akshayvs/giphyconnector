@@ -1,7 +1,5 @@
-package com.sofi.giphyconnector.controllers;
+package com.sofi.giphyconnector.api_rest;
 
-import com.sofi.giphyconnector.DataTransferObjects.SearchResultResponseDTO;
-import com.sofi.giphyconnector.Utility.GIPHYApiConnector;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +13,7 @@ class SearchGifsControllerTest {
         SearchGifsController searchEndpoint = new SearchGifsController();
 
         try {
-            ResponseEntity response =  searchEndpoint.searchGifs("hamburger");
+            ResponseEntity response = searchEndpoint.searchGifs("hamburger");
             assertNotNull(response);
             assertEquals(response.getStatusCode(), HttpStatus.OK);
         } catch (Exception e) {
@@ -28,7 +26,7 @@ class SearchGifsControllerTest {
         SearchGifsController searchEndpoint = new SearchGifsController();
 
         try {
-            ResponseEntity response =  searchEndpoint.searchGifs("wordWith1Number");
+            ResponseEntity response = searchEndpoint.searchGifs("wordWith1Number");
             assertNotNull(response);
             assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
 

@@ -1,9 +1,9 @@
-package com.sofi.giphyconnector.DataTransferObjects;
+package com.sofi.giphyconnector.model.giphy.searchendpoint;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SearchResultEntryDTO {
+public class GIPHYSearchResponseData {
     /**
      * Data Transfer Object for storing each gif entry within the SearchResult DTO.
      * Dev Doc : https://developers.giphy.com/docs/api/endpoint#search

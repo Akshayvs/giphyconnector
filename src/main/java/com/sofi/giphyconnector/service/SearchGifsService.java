@@ -1,10 +1,10 @@
-package com.sofi.giphyconnector.Utility;
+package com.sofi.giphyconnector.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sofi.giphyconnector.DataTransferObjects.SearchResultDTO;
-import com.sofi.giphyconnector.DataTransferObjects.SearchResultEntryDTO;
-import com.sofi.giphyconnector.DataTransferObjects.SearchResultResponseDTO;
 import com.sofi.giphyconnector.Exceptions.GenericException;
+import com.sofi.giphyconnector.Utility.LRUCache;
+import com.sofi.giphyconnector.model.connectorResponse.SearchGifsResponse;
+import com.sofi.giphyconnector.model.giphy.searchendpoint.GIPHYSearchResponse;
+import com.sofi.giphyconnector.model.giphy.searchendpoint.GIPHYSearchResponseData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
@@ -14,7 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
-public class GIPHYApiConnector {
+public class SearchGifsService {
 
     //CONSTANTS
     private static final String TEST_ENV_API_KEY = "nPcu7YTrpMkRwN3aMWS63gJWEm4bKKI0";
@@ -22,7 +22,7 @@ public class GIPHYApiConnector {
     private static final int CACHE_SIZE = 1000;
 
     private static final String SEARCH_ENDPOINT_BASE_URL = "http://api.giphy.com/v1/gifs/search";
-    private static final Logger LOGGER = LoggerFactory.getLogger(GIPHYApiConnector.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SearchGifsService.class);
     private static final RestTemplate restTemplate = com.sofi.giphyconnector.Utility.RestTemplate.RestTemplateWithTimeout();
     private static LRUCache lruCache = new LRUCache(CACHE_SIZE);
 
@@ -32,7 +32,7 @@ public class GIPHYApiConnector {
      * Add retry logic
      * better error handling
      */
-    public SearchResultResponseDTO queryGiphySearchAPI(String searchQuery) throws GenericException {
+    public SearchGifsResponse queryGiphySearchAPI(String searchQuery) throws GenericException {
         /**
          *
          * To optimize the latency, I have added caching logic to dedupe search calls to the GIPHY api for the keywords that are most frequently used.
@@ -62,34 +62,35 @@ public class GIPHYApiConnector {
                 headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
                 HttpEntity<?> entity = new HttpEntity<>(headers);
 
+
                 //REQUEST PAYLOAD
-                ResponseEntity response = restTemplate.exchange(
+                ResponseEntity<GIPHYSearchResponse> response = restTemplate.exchange(
                         builder.toUriString(),
                         HttpMethod.GET,
                         entity,
-                        String.class);
+                        GIPHYSearchResponse.class);
 
                 if (response.getStatusCode() != HttpStatus.OK) {
                     //TODO : Add retry logic here.
-
                     throw new GenericException("Failed to process request. Error when communicating with Giphy API + "
                             + response.getStatusCode().toString());
                 }
 
-                ObjectMapper mapper = new ObjectMapper();
-
                 try {
-                    SearchResultDTO dao = mapper.readValue(response.getBody().toString(), SearchResultDTO.class);
-                    List<SearchResultEntryDTO> gifs = dao.getData();
-                    SearchResultResponseDTO responseDTO = this.constructResponsePayload(gifs);
+
+                    GIPHYSearchResponse responseBody = response.getBody();
+
+                    List<GIPHYSearchResponseData> gifs = responseBody.getData();
+
+                    SearchGifsResponse responseDTO = this.constructResponsePayload(gifs);
 
                     lruCache.put(searchQuery, responseDTO);
-
                     return responseDTO;
                 } catch (Exception ex) {
                     LOGGER.error("Error when parsing Response payload : " + ex.getMessage(), ex);
                     throw new GenericException("Something went wrong. We cannot process your request right now.");
                 }
+
             } catch (GenericException ex) {
                 LOGGER.error("Error when parsing Response payload : " + ex.getMessage(), ex);
                 throw ex;
@@ -103,11 +104,11 @@ public class GIPHYApiConnector {
         }
     }
 
-    private SearchResultResponseDTO constructResponsePayload(List<SearchResultEntryDTO> gifs) {
+    private SearchGifsResponse constructResponsePayload(List<GIPHYSearchResponseData> gifs) {
         if (gifs == null || gifs.size() < 5) {
-            return new SearchResultResponseDTO(0);
+            return new SearchGifsResponse(0);
         }
-        SearchResultResponseDTO result = new SearchResultResponseDTO(SEARCH_RESULT_ENTRY_LIMIT);
+        SearchGifsResponse result = new SearchGifsResponse(SEARCH_RESULT_ENTRY_LIMIT);
 
         for (int i = 0; i < SEARCH_RESULT_ENTRY_LIMIT; i++) {
             result.addDataEntry(gifs.get(i), i);
